@@ -1,7 +1,5 @@
 # Minesweeper Clone
 
-# Iron News
-
 ## Description
 
 Minesweeper is a logic game where mines are hidden in a grid of squares. The object is to reveal all the safe squares without stepping on a mine. The game became famous when Microsoft included it with Windows 3.1 but its origins go even further back.

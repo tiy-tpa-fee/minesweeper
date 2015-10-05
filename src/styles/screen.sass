@@ -1,1 +1,61 @@
 @import "normalize.css/normalize"
+
+html
+  height: 100%
+
+body
+  min-height: 100%
+
+body
+  display: flex
+  flex-direction: column
+
+  main
+    flex-grow: 1
+    display: flex
+    align-items: center
+    justify-content: center
+
+  header
+    a
+      color: #333
+      text-decoration: none
+    // background-color: blue
+
+  footer
+    height: 50px
+    line-height: 50px
+    background-color: #eee
+    color: #999
+
+table.game
+  margin: 2em auto
+
+  td
+    width: 20px
+    height: 20px
+    text-align: center
+    line-height: 20px
+    border: 1px solid #333
+
+    &.unrevealed
+      background-color: #ddd
+
+    &.flagged
+      background-color: #aaf
+
+    &.mine
+      background-color: #faa
+
+
+.instructions
+  text-align: center
+  font-style: italic
+  opacity: 0.25
+
+.create
+  text-align: center
+  margin: 2em
+
+footer, header, .mines
+  text-align: center

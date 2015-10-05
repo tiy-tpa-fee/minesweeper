@@ -15,6 +15,14 @@ $(() => {
   var Game = Backbone.Model.extend({
     urlRoot: function() {
       return API_ROOT + 'games';
+    },
+    defaults: {
+      mines: 0,
+      state: 'new'
+    },
+
+    check: function (x,y) {
+      
 
     }
 
@@ -55,6 +63,62 @@ $(() => {
     }
   });
 
+  var GameView = Backbone.View.extend({
+    template: _.template($('#gameTemplate').html()),
+
+    events: {
+      'click td': 'checkCell'
+
+    },
+
+    checkCell: function (event) {
+      var $td = $(event.target);
+      var x = $td.data('x');
+      var y = $td.data('y');
+      this.model.check(x,y);
+
+    },
+
+    render: function () {
+      var gameTemplate = this.template(this.model.toJSON());
+      this.$el.html(gameTemplate);
+      var $table = $('table.game', this.$el);
+      _.each(this.model.get('board'), function (row, y) {
+        var $tr = $('<tr>');
+        _.each(row, function (col, x) {
+          var $td = $('<td>');
+          $td.data('x', x);
+          $td.data('y', y);
+          switch (col) {
+            case ' ':
+              $td.addClass('unrevealed');
+              break;
+            case '_':
+              $td.addClass('revealed');
+              break;
+            case 'F':
+              $td.addClass('flagged');
+              break;
+            case '*':
+              $td.addClass('mine');
+              break;
+            default:
+             $td.text(col);
+
+          }
+
+          $tr.append($td);
+        })
+       $table.append($tr);
+      });
+      return this.el;
+    },
+    initialize: function () {
+      this.listenTo(this.model, 'change', this.render);
+      this.model.fetch();
+    }
+  });
+
       //var indexTemplate = this.template(this.model.toJSON());
 
   // Routers______________________________________
@@ -72,7 +136,9 @@ $(() => {
     },
 
     showGame: function(gameId) {
-      console.log(gameId);
+      var game = new Game({id: gameId});
+      var gameView = new GameView({model: game});
+      $('main').html(gameView.render());
     },
 
     initialize: function() {

@@ -12,6 +12,14 @@ $(() => {
   // Models_______________________________________
   //______________________________________________
 
+  var Game = Backbone.Model.extend({
+    urlRoot: function() {
+      return API_ROOT + 'games';
+
+    }
+
+
+  });
 
   // Collections__________________________________
   //______________________________________________
@@ -31,8 +39,13 @@ $(() => {
     },
 
     createGame: function (event) {
-      var difficulty = event.target.value;
-      console.log(difficulty);
+      var diff = event.target.value;
+      var game = new Game({difficulty: diff});
+      game.save().then(function() {
+        Backbone.history.navigate(`/game/${game.get('id')}`, true);
+      });
+
+
     },
 
     render: function() {
@@ -58,8 +71,8 @@ $(() => {
       $('main').html(indexView.render());
     },
 
-    showGame: function() {
-
+    showGame: function(gameId) {
+      console.log(gameId);
     },
 
     initialize: function() {

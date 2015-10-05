@@ -22,7 +22,20 @@ $(() => {
     },
 
     check: function (x,y) {
-      
+      this.cellAction(x,y,'/check');
+    },
+
+    flag: function (x,y) {
+      this.cellAction(x,y,'/flag');
+    },
+
+
+    cellAction: function (x,y,action) {
+      this.save({row: y,col:x},{
+        url: this.url()+ action,
+        method: 'POST',
+        patch: true
+      });
 
     }
 
@@ -67,7 +80,8 @@ $(() => {
     template: _.template($('#gameTemplate').html()),
 
     events: {
-      'click td': 'checkCell'
+      'click td.unrevealed': 'checkCell',
+      'contextmenu td': 'flagCell'
 
     },
 
@@ -77,8 +91,18 @@ $(() => {
       var y = $td.data('y');
       this.model.check(x,y);
 
-    },
 
+    },
+    flagCell: function (event) {
+      event.preventDefault();
+      var $td = $(event.target);
+      var x = $td.data('x');
+      var y = $td.data('y');
+      if (! $td.hasClass('revealed')) {
+        this.model.flag(x,y);
+      }
+
+    },
     render: function () {
       var gameTemplate = this.template(this.model.toJSON());
       this.$el.html(gameTemplate);
